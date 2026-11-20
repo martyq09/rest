@@ -6,14 +6,12 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
-# Yerel PC'deki ajan koduyla birebir aynı olmalıdır
 GIZLI_ANAHTAR = "CokGizliBaglantiAnahtari_2026!"
 
 yerel_pc_baglantisi: WebSocket | None = None
 bekleyen_istekler: dict[str, asyncio.Future] = {}
 
 
-# 1. Yerel PC'nin bağlanacağı WebSocket Köprüsü
 @app.websocket("/ws-kopru")
 async def websocket_koprusu(websocket: WebSocket):
     global yerel_pc_baglantisi
@@ -45,7 +43,6 @@ async def websocket_koprusu(websocket: WebSocket):
         yerel_pc_baglantisi = None
 
 
-# 2. Ana Sayfa ve Test Giriş Formu (Bağlantı durumunu da gösterir)
 @app.get("/", response_class=HTMLResponse)
 async def ana_sayfa():
     durum_renk = "green" if yerel_pc_baglantisi else "red"
@@ -65,12 +62,17 @@ async def ana_sayfa():
                 <input type="password" name="sifre" placeholder="Örn: 12345" required style="width:100%; padding:8px; margin:6px 0 16px 0;"><br>
                 <button type="submit" style="width:100%; padding:10px; background:#0066cc; color:white; border:none; border-radius:4px; cursor:pointer;">Giriş Yap (Yerel DB'den Sor)</button>
             </form>
+            <hr style="margin:20px 0;">
+            <form action="/mesaj" method="post">
+                <label>Yerel PC'ye Mesaj:</label><br>
+                <input type="text" name="metin" placeholder="Mesajınızı yazın..." required style="width:100%; padding:8px; margin:6px 0 12px 0;"><br>
+                <button type="submit" style="width:100%; padding:10px; background:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">Mesaj Gönder</button>
+            </form>
         </body>
     </html>
     """
 
 
-# 3. Giriş İsteğini Yerel PC'ye İleten Uç Nokta
 @app.post("/giris")
 async def giris_yap(kullanici: str = Form(...), sifre: str = Form(...)):
     if yerel_pc_baglantisi is None:
@@ -96,6 +98,32 @@ async def giris_yap(kullanici: str = Form(...), sifre: str = Form(...)):
             return {"durum": "Giriş Başarılı!", "yerel_db_yaniti": yanit.get("veri")}
         else:
             raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı.")
+
+    except asyncio.TimeoutError:
+        bekleyen_istekler.pop(istek_id, None)
+        raise HTTPException(status_code=504, detail="Yerel PC 10 saniye içinde yanıt vermedi.")
+
+
+@app.post("/mesaj")
+async def mesaj_gonder(metin: str = Form(...)):
+    if yerel_pc_baglantisi is None:
+        raise HTTPException(status_code=503, detail="Yerel veritabanı bilgisayarı şu an bağlı değil.")
+
+    istek_id = str(uuid.uuid4())
+    loop = asyncio.get_running_loop()
+    future = loop.create_future()
+    bekleyen_istekler[istek_id] = future
+
+    paket = {
+        "istek_id": istek_id,
+        "islem": "mesaj_al",
+        "metin": metin
+    }
+
+    try:
+        await yerel_pc_baglantisi.send_text(json.dumps(paket))
+        yanit = await asyncio.wait_for(future, timeout=10.0)
+        return {"durum": "Mesaj İletildi!", "yerel_pc_yaniti": yanit.get("cevap")}
 
     except asyncio.TimeoutError:
         bekleyen_istekler.pop(istek_id, None)
