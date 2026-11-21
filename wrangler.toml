@@ -1,0 +1,14 @@
+name = "veritabani-koprusu"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[assets]
+directory = "./static"
+
+[[durable_objects.bindings]]
+name = "KOPRU"
+class_name = "KopruOdasi"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["KopruOdasi"]
