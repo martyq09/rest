@@ -1,0 +1,60 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    margin: 0;
+}
+
+.kart {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+h2 { margin-top: 0; color: #333; }
+.durum-satiri { margin-bottom: 15px; font-size: 14px; }
+.acik { color: #28a745; font-weight: bold; }
+.kapali { color: #dc3545; font-weight: bold; }
+
+label { display: block; margin-bottom: 5px; font-size: 14px; color: #555; }
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-mavi { background-color: #0066cc; }
+.btn-mavi:hover { background-color: #0052a3; }
+.btn-yesil { background-color: #28a745; }
+.btn-yesil:hover { background-color: #218838; }
+
+hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+
+#bildirim-kutusu {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+.gizli { display: none; }
+.basarili { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.hata { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
