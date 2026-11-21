@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritabanı Köprü Paneli</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="kart">
+        <h2>Veritabanı & Mesaj Köprüsü</h2>
+        <div class="durum-satiri">
+            Yerel PC Durumu: <span id="durum-etiketi" class="kapali">Kontrol ediliyor...</span>
+        </div>
+
+        <div id="bildirim-kutusu" class="gizli"></div>
+
+        <hr>
+        <form id="giris-formu">
+            <label>Kullanıcı Adı</label>
+            <input type="text" id="kullanici" placeholder="Örn: admin" required>
+            <label>Şifre</label>
+            <input type="password" id="sifre" placeholder="Örn: 12345" required>
+            <button type="submit" class="btn-mavi">Giriş Yap (Yerel DB)</button>
+        </form>
+
+        <hr>
+        <form id="mesaj-formu">
+            <label>Yerel PC'ye Mesaj</label>
+            <input type="text" id="metin" placeholder="Mesajınızı yazın..." required>
+            <button type="submit" class="btn-yesil">Mesaj Gönder</button>
+        </form>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
