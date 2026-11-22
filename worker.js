@@ -1,6 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 
-const GIZLI_ANAHTAR = "CokGizliBaglantiAnahtari_2026!";
+const GIZLI_ANAHTAR = "Baglantikey_12026!";
 
 export class KopruOdasi extends DurableObject {
   constructor(ctx, env) {
