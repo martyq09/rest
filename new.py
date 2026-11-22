@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
-GIZLI_ANAHTAR = "CokGizliBaglantiAnahtari_2026!"
+GIZLI_ANAHTAR = "Baglantikey_12026!"
 
 yerel_pc_baglantisi: WebSocket | None = None
 bekleyen_istekler: dict[str, asyncio.Future] = {}
